@@ -1,0 +1,5 @@
+{
+  "activation_key": "drsadat-hasib-core",
+  "version": "v6.1",
+  "features": ["state/history", "Safe-Bypass", "key rotation"]
+}

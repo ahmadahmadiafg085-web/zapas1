@@ -1,0 +1,8 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\*\shell\BuildToEXE]
+@="Build to EXE"
+"Icon"="C:\\DevTools\\icons\\menu_icon.ico"
+
+[HKEY_CLASSES_ROOT\*\shell\BuildToEXE\command]
+@="\"C:\\Windows\\System32\\cmd.exe\" /c \"\"C:\\DevTools\\build_to_exe_with_icon.bat\" \"%1\"\""

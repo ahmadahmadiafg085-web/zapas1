@@ -1,0 +1,8 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\*\shell\BuildToEXE]
+@="Build to EXE"
+"Icon"="\"%SystemRoot%\\system32\\shell32.dll,137\""
+
+[HKEY_CLASSES_ROOT\*\shell\BuildToEXE\command]
+@="\"C:\\Windows\\System32\\cmd.exe\" /c \"\"C:\\DevTools\\advanced_build_to_exe.bat\" \"%1\"\""

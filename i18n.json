@@ -1,0 +1,72 @@
+{
+  "fa": {
+    "start": "شروع سریع",
+    "demo": "مشاهده دموی سریع",
+    "consent": "رضایت اجرای تست را می‌دهم",
+    "run": "اجرا",
+    "share": "اشتراک‌گذاری"
+  },
+  "en": {
+    "start": "Quick start",
+    "demo": "View quick demo",
+    "consent": "I consent to run the test",
+    "run": "Run",
+    "share": "Share"
+  },
+  "tr": {
+    "start": "Hızlı Başlat",
+    "demo": "Hızlı Demo",
+    "consent": "Testi çalıştırmayı kabul ediyorum",
+    "run": "Çalıştır",
+    "share": "Paylaş"
+  },
+  "ru": {
+    "start": "Быстрый запуск",
+    "demo": "Быстрая демонстрация",
+    "consent": "Я даю согласие",
+    "run": "Запустить",
+    "share": "Поделиться"
+  },
+  "zh": {
+    "start": "快速开始",
+    "demo": "查看演示",
+    "consent": "我同意运行测试",
+    "run": "运行",
+    "share": "分享"
+  },
+  "ar": {
+    "start": "بدء سريع",
+    "demo": "عرض تجريبي",
+    "consent": "أوافق على تشغيل الاختبار",
+    "run": "تشغيل",
+    "share": "مشاركة"
+  },
+  "fr": {
+    "start": "Démarrer",
+    "demo": "Voir la démo",
+    "consent": "Je consens",
+    "run": "Exécuter",
+    "share": "Partager"
+  },
+  "de": {
+    "start": "Schnellstart",
+    "demo": "Demo ansehen",
+    "consent": "Ich stimme zu",
+    "run": "Ausführen",
+    "share": "Teilen"
+  },
+  "es": {
+    "start": "Inicio rápido",
+    "demo": "Ver demo",
+    "consent": "Consiento",
+    "run": "Ejecutar",
+    "share": "Compartir"
+  },
+  "jp": {
+    "start": "クイックスタート",
+    "demo": "デモを見る",
+    "consent": "同意します",
+    "run": "実行",
+    "share": "共有"
+  }
+}

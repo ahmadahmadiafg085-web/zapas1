@@ -1,0 +1,29 @@
+:root{--bg:#071126;--card:#0b1a2a;--accent:#2f81f7;--muted:#9fb3c8}
+*{box-sizing:border-box}
+body{font-family:sans-serif;background:var(--bg);color:#eef;margin:0}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:linear-gradient(90deg,#0f1724,#12263e);border-bottom:3px solid rgba(47,129,247,0.12)}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:64px;height:64px;border-radius:12px}
+h1{margin:0;font-size:20px}
+main{padding:18px}
+#hero{background:linear-gradient(180deg, rgba(47,129,247,0.06), transparent);padding:18px;border-radius:12px}
+.cta-row{display:flex;gap:8px;margin-top:12px}
+button{background:var(--accent);border:none;color:#fff;padding:10px 14px;border-radius:8px;cursor:pointer}
+button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+.hidden{display:none}
+#hub{display:flex;gap:14px;margin-top:16px}
+aside#sidebar{width:260px}
+#workspace{flex:1;background:var(--card);padding:12px;border-radius:10px;min-height:300px}
+input,textarea,select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#eef;margin-top:8px}
+.consent{display:flex;align-items:center;gap:8px;margin-top:8px}
+.actions{display:flex;gap:10px;margin-top:12px}
+#statusBox{margin-top:12px;padding:10px;background:rgba(255,255,255,0.02);border-radius:8px;min-height:80px}
+.marquee{margin-top:16px;padding:10px;background:#061122;border-radius:6px;overflow:hidden;white-space:nowrap}
+.marquee::after{content:"";display:inline-block;animation:marquee 18s linear infinite}
+@keyframes marquee{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5)}
+.modal-content{background:var(--card);padding:16px;border-radius:10px;width:90%;max-width:520px}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+footer{padding:12px;text-align:center;color:var(--muted);font-size:13px;border-top:1px solid rgba(255,255,255,0.02);margin-top:26px}
+.footer-inner{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.socials a{color:var(--muted);text-decoration:none;margin-left:6px}

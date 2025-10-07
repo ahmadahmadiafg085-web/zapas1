@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="fa">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CyberSmart Hub — مرکز هوشمند</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <img src="logo.svg" alt="CyberSmart Hub" class="logo"/>
+    <div>
+      <h1>CyberSmart Hub</h1>
+      <p class="tagline">هاب‌هوشمند تست، اجرا و خدمات دیجیتال — همه‌کاره و قابل‌گسترش</p>
+    </div>
+  </div>
+  <div class="lang-switch">
+    <select id="langSelect"></select>
+  </div>
+</header>
+
+<main>
+  <section id="hero">
+    <h2 id="hero-title">مرکز هوشمند خدمات امنیتی و توسعه</h2>
+    <p id="hero-sub">یک پلتفرم آماده برای جذب مشتری، اجرای تست‌ها، آپلود/دانلود و پرداخت مرحله‌ای.</p>
+    <div class="cta-row">
+      <button id="startBtn">شروع سریع</button>
+      <button id="demoBtn" class="secondary">مشاهده دموی سریع</button>
+    </div>
+  </section>
+
+  <section id="hub" class="hidden">
+    <aside id="sidebar">
+      <div class="admin-panel">
+        <h3>مدیریت (Admin)</h3>
+        <button id="openSettings">تنظیمات</button>
+        <button id="openModules">ماژول‌ها</button>
+        <button id="openUploads">آپلود/دانلود</button>
+      </div>
+      <nav id="scenarios">
+        <h4>سناریوها</h4>
+        <ul id="scenarioList"></ul>
+      </nav>
+    </aside>
+
+    <section id="workspace">
+      <div id="controls">
+        <select id="scenarioSelect"></select>
+        <input id="repoInput" placeholder="لینک گیت‌هاب یا آدرس پروژه (اختیاری)"/>
+        <textarea id="notes" placeholder="توضیحات یا پارامترها"></textarea>
+        <label class="consent"><input id="consent" type="checkbox"> رضایت اجرای تست را می‌دهم</label>
+        <div class="actions">
+          <button id="runScenario" disabled>🚀 اجرا</button>
+          <button id="shortenLink">🔗 کوتاه‌سازی لینک</button>
+          <button id="shareBtn">🔄 به اشتراک‌گذاری</button>
+        </div>
+      </div>
+
+      <div id="statusBox"></div>
+
+      <div id="marquee" class="marquee">🔔 CyberSmart — خدمات حرفه‌ای، امنیت تضمینی — تماس: @yourbot</div>
+    </section>
+  </section>
+
+  <!-- Settings modal -->
+  <div id="settingsModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>تنظیمات سریع Admin</h3>
+      <label>نام برند<input id="brandName" value="CyberSmart Hub"/></label>
+      <label>Base URL<input id="baseUrl" placeholder="https://your-backend.example.com"/></label>
+      <label>Enable Payments
+        <select id="paymentsEnable"><option value="false">غیرفعال</option><option value="true">فعال</option></select>
+      </label>
+      <label>Payment Providers (placeholders)</label>
+      <textarea id="paymentProviders" placeholder='{"paypal":"<your>", "stripe":"<your>"}'></textarea>
+      <div class="modal-actions">
+        <button id="saveSettings">ذخیره</button>
+        <button id="closeSettings" class="secondary">بستن</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>© 2025 CyberSmart Hub</div>
+    <div class="socials">
+      <a href="#" id="socialTwitter">Twitter</a> • <a href="#" id="socialTelegram">Telegram</a> • <a href="#" id="socialLinkedin">LinkedIn</a>
+    </div>
+  </div>
+</footer>
+
+<script src="i18n.json" type="application/json" id="i18n-data"></script>
+<script src="app.js"></script>
+</body>
+</html>
